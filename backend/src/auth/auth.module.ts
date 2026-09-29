@@ -10,7 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.registerAsync({
       useFactory: () => ({
-        secret: process.env.JWT_SECRET || 'super-secret-jwt-key-veryresto-wfh-2026',
+        secret: process.env.JWT_SECRET,
         signOptions: { expiresIn: '7d' },
       }),
     }),

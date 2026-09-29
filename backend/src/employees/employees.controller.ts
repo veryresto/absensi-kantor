@@ -39,6 +39,14 @@ const storage = diskStorage({
   },
 });
 
+const imageFileFilter = (req: any, file: Express.Multer.File, cb: (error: Error | null, acceptFile: boolean) => void) => {
+  if (/^image\/(jpeg|png|webp|gif)$/.test(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only JPEG, PNG, WEBP, and GIF images are allowed'), false);
+  }
+};
+
 @Controller('employees')
 @UseGuards(JwtAuthGuard)
 export class EmployeesController {
@@ -51,7 +59,7 @@ export class EmployeesController {
   }
 
   @Patch('me')
-  @UseInterceptors(FileInterceptor('photo', { storage }))
+  @UseInterceptors(FileInterceptor('photo', { storage, fileFilter: imageFileFilter, limits: { fileSize: 5 * 1024 * 1024 } }))
   async updateProfile(
     @Req() req: any,
     @Body() dto: UpdateProfileDto,
@@ -71,7 +79,7 @@ export class EmployeesController {
   @Post('admin/create')
   @UseGuards(RolesGuard)
   @Roles(Role.HR_ADMIN)
-  @UseInterceptors(FileInterceptor('photo', { storage }))
+  @UseInterceptors(FileInterceptor('photo', { storage, fileFilter: imageFileFilter, limits: { fileSize: 5 * 1024 * 1024 } }))
   async createEmployee(
     @Body() dto: CreateEmployeeDto,
     @UploadedFile() file?: Express.Multer.File,
@@ -82,7 +90,7 @@ export class EmployeesController {
   @Put('admin/update/:id')
   @UseGuards(RolesGuard)
   @Roles(Role.HR_ADMIN)
-  @UseInterceptors(FileInterceptor('photo', { storage }))
+  @UseInterceptors(FileInterceptor('photo', { storage, fileFilter: imageFileFilter, limits: { fileSize: 5 * 1024 * 1024 } }))
   async updateEmployee(
     @Param('id') id: string,
     @Body() dto: UpdateEmployeeDto,

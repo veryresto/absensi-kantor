@@ -22,6 +22,7 @@ export const App: React.FC = () => {
     if (token) {
       // Connect Socket.IO for real-time WebSocket notifications from NestJS backend
       const socket = io(import.meta.env.VITE_BACKEND_URL, {
+        auth: { token },
         transports: ['websocket', 'polling'],
       });
 

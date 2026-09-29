@@ -10,9 +10,17 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  const corsOrigins = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  if (corsOrigins.length === 0) {
+    throw new Error('CORS_ORIGINS must be configured');
+  }
+
   // Enable CORS
   app.enableCors({
-    origin: '*',
+    origin: corsOrigins,
     credentials: true,
   });
 
@@ -27,13 +35,13 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api');
 
-  // Serve static photo uploads directory
-  const uploadDir = path.join(process.cwd(), 'uploads');
+  // Serve only profile photos from the public uploads directory.
+  const uploadDir = path.join(process.cwd(), 'uploads', 'photos');
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
   app.useStaticAssets(uploadDir, {
-    prefix: '/uploads',
+    prefix: '/uploads/photos',
   });
 
   // Connect RabbitMQ Microservice for profile update logging
