@@ -4,7 +4,7 @@ Sistem Manajemen Absensi WFH Karyawan dan Monitoring HRD berbasis Microservices,
 
 Sistem ini dapat diakses secara langsung melalui domain:
 - **`http://absen.veryresto.com`** (Aplikasi WFH Karyawan)
-- **`http://hr-admin.veryresto.com`** (Aplikasi Monitoring HRD)
+- **`http://absen-admin.veryresto.com`** (Aplikasi Monitoring HRD)
 
 ---
 
@@ -22,7 +22,7 @@ Sistem ini dapat diakses secara langsung melalui domain:
    - Menampilkan ringkasan kehadiran (Default: Awal Bulan s/d Hari ini).
    - Filter tanggal (*From - To*) dan tombol pencarian ("Cari").
 
-### B. Aplikasi Monitoring Karyawan HRD (`hr-admin.veryresto.com`)
+### B. Aplikasi Monitoring Karyawan HRD (`absen-admin.veryresto.com`)
 1. **Real-time Profile Alert**: Popup/Toast Notifikasi otomatis muncul di layar Admin secara instant saat ada karyawan yang mengubah profil.
 2. **Kelola Data Karyawan**: Tambah karyawan baru dan perbarui informasi karyawan existing.
 3. **Monitoring Absensi (Read-Only)**: Melihat seluruh rekapan absensi masuk & pulang semua karyawan dengan filter tanggal dan nama.
@@ -34,7 +34,7 @@ Sistem ini dapat diakses secara langsung melalui domain:
 
 | Role | Domain | Email | Password |
 |------|--------|-------|----------|
-| **Admin HRD** | `hr-admin.veryresto.com` | `hr.admin@veryresto.com` | `Password123!` |
+| **Admin HRD** | `absen-admin.veryresto.com` | `hr.admin@veryresto.com` | `Password123!` |
 | **Karyawan 1** | `absen.veryresto.com` | `budi.santoso@veryresto.com` | `Password123!` |
 | **Karyawan 2** | `absen.veryresto.com` | `siti.aminah@veryresto.com` | `Password123!` |
 | **Karyawan 3** | `absen.veryresto.com` | `dewi.lestari@veryresto.com` | `Password123!` |
@@ -46,7 +46,7 @@ Sistem ini dapat diakses secara langsung melalui domain:
 ```mermaid
 flowchart TD
     A["absen.veryresto.com<br/>(Aplikasi Karyawan)"] -->|HTTP / REST| Caddy["Caddy Reverse Proxy"]
-    B["hr-admin.veryresto.com<br/>(Aplikasi HRD)"] -->|HTTP / REST| Caddy
+    B["absen-admin.veryresto.com<br/>(Aplikasi HRD)"] -->|HTTP / REST| Caddy
     Caddy --> API["NestJS REST API<br/>(Port 3000)"]
     API --> DB1[("Primary Postgres DB<br/>wfh_attendance_db")]
     API -->|Realtime Alert| WS["Socket.IO Gateway"]
@@ -95,7 +95,7 @@ cd frontend/employee-app
 npm install
 npm run preview -- --host 0.0.0.0 --port 3001
 
-# HR Admin App (hr-admin.veryresto.com)
+# HR Admin App (absen-admin.veryresto.com)
 cd frontend/hr-admin-app
 npm install
 npm run preview -- --host 0.0.0.0 --port 3002

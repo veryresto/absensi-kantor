@@ -1,0 +1,17 @@
+# Caddyfile for VeryResto WFH Attendance & HR Monitoring System
+
+# 1. Employee WFH Application
+absen.veryresto.com {
+    reverse_proxy host.docker.internal:3001
+}
+
+# 2. HR Admin Monitoring Application
+absen-admin.veryresto.com {
+    reverse_proxy host.docker.internal:3002
+}
+
+# 3. Backend REST API & WebSockets Gateway
+absen-api.veryresto.com {
+    reverse_proxy host.docker.internal:3000
+}
+

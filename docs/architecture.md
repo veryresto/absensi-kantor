@@ -10,7 +10,7 @@ Aplikasi **VeryResto WFH Attendance & HR Monitoring** dirancang menggunakan arsi
 flowchart TD
     subgraph Clients ["Web Applications"]
         A["absen.veryresto.com<br/>(Aplikasi WFH Karyawan)"]
-        B["hr-admin.veryresto.com<br/>(Aplikasi Monitoring HRD)"]
+        B["absen-admin.veryresto.com<br/>(Aplikasi Monitoring HRD)"]
     end
 
     subgraph Proxy ["Reverse Proxy"]
@@ -37,7 +37,7 @@ flowchart TD
     A -->|HTTP Request| Caddy
     B -->|HTTP Request| Caddy
     Caddy -->|absen.veryresto.com| A
-    Caddy -->|hr-admin.veryresto.com| B
+    Caddy -->|absen-admin.veryresto.com| B
 
     %% API Connections
     A -->|REST API & Uploads| API
@@ -64,7 +64,7 @@ Ketika Karyawan memperbarui data profilnya (Foto, Nomor HP, atau Password):
 2. **Backend API (`backend`)**:
    - Menyimpan file foto ke dalam sistem berkas lokal (`uploads/photos/`).
    - Memperbarui data pengguna pada **Primary Database (`wfh_attendance_db`)**.
-   - **Requirement 3.A.1 (Popup Alert Realtime)**: Memancarkan event WebSocket (`employee_profile_updated`) ke **HRD Admin App (`hr-admin.veryresto.com`)**, yang langsung menampilkan notifikasi popup/toast di layar admin.
+   - **Requirement 3.A.1 (Popup Alert Realtime)**: Memancarkan event WebSocket (`employee_profile_updated`) ke **HRD Admin App (`absen-admin.veryresto.com`)**, yang langsung menampilkan notifikasi popup/toast di layar admin.
    - **Requirement 3.A.2 (Data Stream / Message Queue)**: Mempublikasikan event (`profile.updated`) ke antrean **RabbitMQ (`profile_updates_queue`)**.
 3. **Audit Log Microservice Consumer**:
    - Menerima pesan dari antrean RabbitMQ secara asinkron.
