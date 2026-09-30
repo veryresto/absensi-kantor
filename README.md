@@ -3,8 +3,9 @@
 Sistem Manajemen Absensi WFH Karyawan dan Monitoring HRD berbasis Microservices, NestJS, React.js, PostgreSQL, RabbitMQ, dan Socket.IO.
 
 Sistem ini dapat diakses secara langsung melalui domain:
-- **`http://absen.veryresto.com`** (Aplikasi WFH Karyawan)
-- **`http://absen-admin.veryresto.com`** (Aplikasi Monitoring HRD)
+- **`https://absen.veryresto.com`** (Aplikasi WFH Karyawan)
+- **`https://absen-admin.veryresto.com`** (Aplikasi Monitoring HRD)
+- **`https://absen-api.veryresto.com`** (REST API dan Socket.IO)
 
 ---
 
@@ -21,12 +22,15 @@ Sistem ini dapat diakses secara langsung melalui domain:
 3. **Summary Absen**:
    - Menampilkan ringkasan kehadiran (Default: Awal Bulan s/d Hari ini).
    - Filter tanggal (*From - To*) dan tombol pencarian ("Cari").
+   - Tampilan responsif: tabel pada desktop dan daftar ringkas pada perangkat mobile.
 
 ### B. Aplikasi Monitoring Karyawan HRD (`absen-admin.veryresto.com`)
 1. **Real-time Profile Alert**: Popup/Toast Notifikasi otomatis muncul di layar Admin secara instant saat ada karyawan yang mengubah profil.
 2. **Kelola Data Karyawan**: Tambah karyawan baru dan perbarui informasi karyawan existing.
 3. **Monitoring Absensi (Read-Only)**: Melihat seluruh rekapan absensi masuk & pulang semua karyawan dengan filter tanggal dan nama.
 4. **Audit Log Queue Stream**: Melihat log aktivitas perubahan profil yang ditangkap dari RabbitMQ di secondary database.
+
+Tabel operasional pada aplikasi HRD ditampilkan sebagai daftar record ringkas pada perangkat mobile agar informasi dan tindakan tetap mudah digunakan tanpa horizontal scrolling.
 
 ---
 
@@ -88,7 +92,7 @@ docker compose ps
 # Ikuti log seluruh service
 docker compose logs -f
 
-# Restart satu service
+# Restart satu service tanpa membangun ulang image
 docker compose restart api
 docker compose restart employee-web
 docker compose restart admin-web
@@ -103,12 +107,12 @@ docker compose start
 docker compose down
 ```
 
-Setelah mengubah source code, rebuild service terkait:
+Setelah mengubah source code, rebuild dan recreate service terkait. `docker compose restart`
+saja tidak memuat source atau bundle frontend yang baru:
 
 ```bash
 docker compose up -d --build api
-docker compose up -d --build employee-web
-docker compose up -d --build admin-web
+docker compose up -d --build employee-web admin-web
 ```
 
 Service aplikasi tidak membuka port `3000`–`3002` ke publik. Akses dilakukan melalui Caddy:
@@ -119,7 +123,7 @@ Service aplikasi tidak membuka port `3000`–`3002` ke publik. Akses dilakukan m
 
 ### Menjalankan secara Manual untuk Development
 
-### 1. Prasyarat System
+### 1. Prasyarat Sistem
 - Node.js >= 20
 - Docker & Docker Compose
 
@@ -148,13 +152,17 @@ npm start         # Start backend API & RabbitMQ consumer
 # Employee App (absen.veryresto.com)
 cd frontend/employee-app
 npm install
-npm run preview -- --host 0.0.0.0 --port 3001
+npm run dev
 
 # HR Admin App (absen-admin.veryresto.com)
 cd frontend/hr-admin-app
 npm install
-npm run preview -- --host 0.0.0.0 --port 3002
+npm run dev
 ```
+
+Vite menjalankan Employee App pada `http://localhost:3001` dan HR Admin App pada
+`http://localhost:3002`. Untuk menguji bundle production secara lokal, jalankan
+`npm run build` lalu `npm run preview` di masing-masing direktori frontend.
 
 ---
 
