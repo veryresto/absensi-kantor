@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres-primary:
     image: postgres:15-alpine
@@ -50,6 +48,62 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: ./backend
+    container_name: wfh-api
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      PRIMARY_DATABASE_URL: postgresql://postgres:postgrespassword@postgres-primary:5432/wfh_attendance_db?schema=public
+      SECONDARY_DATABASE_URL: postgresql://postgres:postgrespassword@postgres-secondary:5432/audit_log_db?schema=public
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      PORT: 3000
+    volumes:
+      - backend_uploads:/app/uploads
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+      postgres-secondary:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:3000/api', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  employee-web:
+    build:
+      context: ./frontend/employee-app
+      args:
+        VITE_API_BASE_URL: https://absen-api.veryresto.com/api
+        VITE_BACKEND_URL: https://absen-api.veryresto.com
+    container_name: wfh-employee-web
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  admin-web:
+    build:
+      context: ./frontend/hr-admin-app
+      args:
+        VITE_API_BASE_URL: https://absen-api.veryresto.com/api
+        VITE_BACKEND_URL: https://absen-api.veryresto.com
+    container_name: wfh-admin-web
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   caddy:
     image: caddy:2-alpine
     container_name: wfh-caddy
@@ -61,12 +115,17 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      api:
+        condition: service_healthy
+      employee-web:
+        condition: service_healthy
+      admin-web:
+        condition: service_healthy
 
 volumes:
   postgres_primary_data:
   postgres_secondary_data:
   caddy_data:
   caddy_config:
-
+  backend_uploads:

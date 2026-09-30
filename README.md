@@ -64,6 +64,51 @@ flowchart TD
 
 ## 🛠 Panduan Jalankan Aplikasi
 
+### Menjalankan Seluruh Stack dengan Docker Compose (Disarankan)
+
+Seluruh aplikasi dan infrastrukturnya dikelola oleh satu Compose project:
+
+```bash
+# Build image dan jalankan seluruh service
+docker compose up -d --build
+
+# Lihat status
+docker compose ps
+
+# Ikuti log seluruh service
+docker compose logs -f
+
+# Restart satu service
+docker compose restart api
+docker compose restart employee-web
+docker compose restart admin-web
+
+# Stop tanpa menghapus container/data
+docker compose stop
+
+# Jalankan kembali container yang sudah dihentikan
+docker compose start
+
+# Hentikan dan hapus container/network; volume database tetap tersimpan
+docker compose down
+```
+
+Setelah mengubah source code, rebuild service terkait:
+
+```bash
+docker compose up -d --build api
+docker compose up -d --build employee-web
+docker compose up -d --build admin-web
+```
+
+Service aplikasi tidak membuka port `3000`–`3002` ke publik. Akses dilakukan melalui Caddy:
+
+- `https://absen.veryresto.com` → `employee-web`
+- `https://absen-admin.veryresto.com` → `admin-web`
+- `https://absen-api.veryresto.com` → `api`
+
+### Menjalankan secara Manual untuk Development
+
 ### 1. Prasyarat System
 - Node.js >= 20
 - Docker & Docker Compose
