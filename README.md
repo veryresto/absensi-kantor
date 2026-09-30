@@ -68,6 +68,16 @@ flowchart TD
 
 Seluruh aplikasi dan infrastrukturnya dikelola oleh satu Compose project:
 
+Salin konfigurasi domain, lalu sesuaikan nilainya sebelum build pertama:
+
+```bash
+cp .env.example .env
+```
+
+`EMPLOYEE_DOMAIN`, `ADMIN_DOMAIN`, dan `API_DOMAIN` digunakan oleh Caddy.
+`VITE_API_BASE_URL` dan `VITE_BACKEND_URL` ditanam ke build frontend, sehingga
+perubahan kedua nilai tersebut memerlukan rebuild `employee-web` dan `admin-web`.
+
 ```bash
 # Build image dan jalankan seluruh service
 docker compose up -d --build

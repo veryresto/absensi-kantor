@@ -7,8 +7,8 @@ RUN npm ci
 
 COPY . .
 
-ARG VITE_API_BASE_URL=https://absen-api.veryresto.com/api
-ARG VITE_BACKEND_URL=https://absen-api.veryresto.com
+ARG VITE_API_BASE_URL
+ARG VITE_BACKEND_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 

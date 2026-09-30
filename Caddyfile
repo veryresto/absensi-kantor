@@ -1,16 +1,16 @@
 # Caddyfile for VeryResto WFH Attendance & HR Monitoring System
 
 # 1. Employee WFH Application
-absen.veryresto.com {
+{$EMPLOYEE_DOMAIN} {
     reverse_proxy employee-web:80
 }
 
 # 2. HR Admin Monitoring Application
-absen-admin.veryresto.com {
+{$ADMIN_DOMAIN} {
     reverse_proxy admin-web:80
 }
 
 # 3. Backend REST API & WebSockets Gateway
-absen-api.veryresto.com {
+{$API_DOMAIN} {
     reverse_proxy api:3000
 }

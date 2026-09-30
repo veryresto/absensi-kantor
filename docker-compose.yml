@@ -80,8 +80,8 @@ services:
     build:
       context: ./frontend/employee-app
       args:
-        VITE_API_BASE_URL: https://absen-api.veryresto.com/api
-        VITE_BACKEND_URL: https://absen-api.veryresto.com
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:?Set VITE_API_BASE_URL in .env}
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:?Set VITE_BACKEND_URL in .env}
     container_name: wfh-employee-web
     restart: unless-stopped
     healthcheck:
@@ -94,8 +94,8 @@ services:
     build:
       context: ./frontend/hr-admin-app
       args:
-        VITE_API_BASE_URL: https://absen-api.veryresto.com/api
-        VITE_BACKEND_URL: https://absen-api.veryresto.com
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:?Set VITE_API_BASE_URL in .env}
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL:?Set VITE_BACKEND_URL in .env}
     container_name: wfh-admin-web
     restart: unless-stopped
     healthcheck:
@@ -108,6 +108,10 @@ services:
     image: caddy:2-alpine
     container_name: wfh-caddy
     restart: unless-stopped
+    environment:
+      EMPLOYEE_DOMAIN: ${EMPLOYEE_DOMAIN:?Set EMPLOYEE_DOMAIN in .env}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN:?Set ADMIN_DOMAIN in .env}
+      API_DOMAIN: ${API_DOMAIN:?Set API_DOMAIN in .env}
     ports:
       - "80:80"
       - "443:443"
