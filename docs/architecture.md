@@ -7,24 +7,28 @@ Aplikasi **VeryResto WFH Attendance & HR Monitoring** dirancang menggunakan arsi
 ## 1. Diagram Arsitektur (Mermaid)
 
 ```mermaid
-flowchart TD
-    subgraph Clients ["Web Applications"]
-        A["absen.veryresto.com<br/>(Aplikasi WFH Karyawan)"]
-        B["absen-admin.veryresto.com<br/>(Aplikasi Monitoring HRD)"]
+flowchart LR
+    subgraph Clients ["Client Browsers"]
+        EmployeeBrowser["Browser Karyawan"]
+        AdminBrowser["Browser HRD"]
     end
 
     subgraph Proxy ["Reverse Proxy"]
-        Caddy["Caddy Web Server<br/>(Port 80/443 Routing)"]
+        Caddy["Caddy<br/>HTTPS/WSS :443"]
+    end
+
+    subgraph Frontends ["Frontend Containers"]
+        EmployeeWeb["employee-web<br/>React + Nginx :80"]
+        AdminWeb["admin-web<br/>React + Nginx :80"]
     end
 
     subgraph BackendServices ["Backend Services (NestJS)"]
-        API["Main REST API & WebSocket Gateway<br/>(NestJS - Port 3000)"]
+        API["REST API + Socket.IO Gateway<br/>NestJS :3000"]
         MQ_Sub["Audit Log Microservice Subscriber<br/>(RabbitMQ Consumer)"]
     end
 
-    subgraph Broker ["Message Broker & Realtime"]
+    subgraph Broker ["Message Broker"]
         RMQ["RabbitMQ Broker<br/>(profile_updates_queue)"]
-        WS["WebSocket Server<br/>(Socket.IO Realtime Alert)"]
     end
 
     subgraph Storage ["Databases & Storage"]
@@ -33,27 +37,32 @@ flowchart TD
         FS["Filesystem Photo Uploads<br/>(Local Storage)"]
     end
 
-    %% Client Routing
-    A -->|HTTP Request| Caddy
-    B -->|HTTP Request| Caddy
-    Caddy -->|absen.veryresto.com| A
-    Caddy -->|absen-admin.veryresto.com| B
+    %% Browser requests enter through Caddy
+    EmployeeBrowser -->|"HTTPS"| Caddy
+    AdminBrowser -->|"HTTPS / WSS"| Caddy
 
-    %% API Connections
-    A -->|REST API & Uploads| API
-    B -->|REST API| API
-    B <-->|WebSocket Connection| WS
+    %% Host-based routing
+    Caddy -->|"absen.veryresto.com"| EmployeeWeb
+    Caddy -->|"absen-admin.veryresto.com"| AdminWeb
+    Caddy -->|"absen-api.veryresto.com<br/>REST, uploads, Socket.IO"| API
 
     %% Primary Data Flow
     API -->|Read/Write Data| DB1
     API -->|Save Photo Files| FS
 
     %% Profile Update Event Flow
-    API -->|1. Realtime Broadcast| WS
+    API -.->|"1. Socket.IO event"| Caddy
+    Caddy -.->|"Koneksi WSS yang aktif"| AdminBrowser
     API -->|2. Publish Event 'profile.updated'| RMQ
     RMQ -->|Consume Message| MQ_Sub
     MQ_Sub -->|Persist Audit Log| DB2
 ```
+
+Browser selalu mengakses sistem melalui **Caddy**. Caddy melakukan routing berdasarkan
+hostname: dua domain aplikasi menuju container frontend masing-masing, sedangkan domain
+API menuju proses NestJS. Setelah JavaScript frontend dimuat di browser, request REST,
+upload, dan koneksi Socket.IO juga dikirim melalui Caddy menggunakan domain API; browser
+tidak mengakses port internal container secara langsung.
 
 ---
 
