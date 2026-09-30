@@ -112,9 +112,32 @@ export class EmployeesService {
   // Admin CRUD Methods
   async getAllEmployees() {
     const employees = await this.prisma.employee.findMany({
+      where: { deletedAt: null },
       orderBy: { createdAt: 'desc' },
     });
     return employees.map(({ password, ...emp }) => emp);
+  }
+
+  async getDeletedEmployees() {
+    const employees = await this.prisma.employee.findMany({
+      where: { deletedAt: { not: null } },
+      orderBy: { deletedAt: 'desc' },
+    });
+    return employees.map(({ password, ...emp }) => emp);
+  }
+
+  async softDeleteEmployee(id: string) {
+    const employee = await this.prisma.employee.findUnique({ where: { id } });
+    if (!employee || employee.deletedAt) {
+      throw new NotFoundException('Karyawan aktif tidak ditemukan');
+    }
+
+    const deleted = await this.prisma.employee.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+    const { password, ...result } = deleted;
+    return result;
   }
 
   async createEmployee(dto: CreateEmployeeDto, file?: Express.Multer.File) {
@@ -149,7 +172,7 @@ export class EmployeesService {
     const existing = await this.prisma.employee.findUnique({
       where: { id },
     });
-    if (!existing) {
+    if (!existing || existing.deletedAt) {
       throw new NotFoundException('Karyawan tidak ditemukan');
     }
 

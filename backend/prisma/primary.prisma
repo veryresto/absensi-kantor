@@ -27,6 +27,7 @@ model Employee {
   position    String
   phone       String
   role        Role         @default(EMPLOYEE)
+  deletedAt   DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 

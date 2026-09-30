@@ -4,6 +4,7 @@ import {
   Patch,
   Post,
   Put,
+  Delete,
   Param,
   Body,
   UseGuards,
@@ -76,6 +77,13 @@ export class EmployeesController {
     return this.employeesService.getAllEmployees();
   }
 
+  @Get('admin/deleted')
+  @UseGuards(RolesGuard)
+  @Roles(Role.HR_ADMIN)
+  async getDeletedEmployees() {
+    return this.employeesService.getDeletedEmployees();
+  }
+
   @Post('admin/create')
   @UseGuards(RolesGuard)
   @Roles(Role.HR_ADMIN)
@@ -97,5 +105,12 @@ export class EmployeesController {
     @UploadedFile() file?: Express.Multer.File,
   ) {
     return this.employeesService.updateEmployee(id, dto, file);
+  }
+
+  @Delete('admin/:id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.HR_ADMIN)
+  async deleteEmployee(@Param('id') id: string) {
+    return this.employeesService.softDeleteEmployee(id);
   }
 }

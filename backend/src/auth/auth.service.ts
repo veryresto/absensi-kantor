@@ -16,7 +16,7 @@ export class AuthService {
       where: { email: loginDto.email.toLowerCase() },
     });
 
-    if (!user) {
+    if (!user || user.deletedAt) {
       throw new UnauthorizedException('Email atau password tidak valid');
     }
 

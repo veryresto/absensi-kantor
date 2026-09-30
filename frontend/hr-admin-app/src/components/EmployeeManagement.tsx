@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { api, getPhotoUrl } from '../api';
-import { Users, UserPlus, Edit, Phone, Mail, Camera, Shield, X, CheckCircle } from 'lucide-react';
+import { Users, UserPlus, Edit, Trash2, X } from 'lucide-react';
 
 export const EmployeeManagement: React.FC = () => {
   const [employees, setEmployees] = useState<any[]>([]);
+  const [deletedEmployees, setDeletedEmployees] = useState<any[]>([]);
+  const [showDeleted, setShowDeleted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingEmp, setEditingEmp] = useState<any | null>(null);
@@ -33,6 +35,32 @@ export const EmployeeManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchDeletedEmployees = async () => {
+    try {
+      const res = await api.get('/employees/admin/deleted');
+      setDeletedEmployees(res.data || []);
+    } catch (err) {
+      console.error('Failed to fetch deleted employees', err);
+    }
+  };
+
+  const handleDelete = async (employee: any) => {
+    if (!window.confirm(`Hapus karyawan ${employee.name}? Data absensinya tetap disimpan.`)) return;
+    try {
+      await api.delete(`/employees/admin/${employee.id}`);
+      await fetchEmployees();
+      if (showDeleted) await fetchDeletedEmployees();
+    } catch (err: any) {
+      setFormError(err.response?.data?.message || 'Gagal menghapus karyawan');
+    }
+  };
+
+  const toggleDeleted = async () => {
+    const next = !showDeleted;
+    setShowDeleted(next);
+    if (next) await fetchDeletedEmployees();
   };
 
   const openAddModal = () => {
@@ -181,6 +209,13 @@ export const EmployeeManagement: React.FC = () => {
                         <Edit className="w-3.5 h-3.5" />
                         Edit
                       </button>
+                      <button
+                        onClick={() => handleDelete(emp)}
+                        className="inline-flex items-center gap-1 ml-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-medium text-xs rounded-lg transition"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Hapus
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -188,6 +223,48 @@ export const EmployeeManagement: React.FC = () => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">Deleted Employee</h3>
+            <p className="text-xs text-gray-500">Data karyawan yang dihapus secara soft-delete; riwayat absensi tetap tersimpan.</p>
+          </div>
+          <button
+            onClick={toggleDeleted}
+            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-sm rounded-lg"
+          >
+            {showDeleted ? 'Sembunyikan' : 'Lihat Deleted Employee'}
+          </button>
+        </div>
+
+        {showDeleted && (
+          <div className="overflow-x-auto rounded-xl border border-gray-200 mt-5">
+            <table className="w-full text-left text-sm text-gray-700">
+              <thead className="bg-slate-100 text-slate-800 font-semibold border-b text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="py-3.5 px-4">Nama</th>
+                  <th className="py-3.5 px-4">Email</th>
+                  <th className="py-3.5 px-4">Posisi</th>
+                  <th className="py-3.5 px-4">Deleted At</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {deletedEmployees.length === 0 ? (
+                  <tr><td colSpan={4} className="text-center py-8 text-gray-500">Belum ada deleted employee.</td></tr>
+                ) : deletedEmployees.map((emp) => (
+                  <tr key={emp.id}>
+                    <td className="py-3.5 px-4 font-semibold text-gray-900">{emp.name}</td>
+                    <td className="py-3.5 px-4">{emp.email}</td>
+                    <td className="py-3.5 px-4">{emp.position}</td>
+                    <td className="py-3.5 px-4 font-mono text-xs">{new Date(emp.deletedAt).toLocaleString('id-ID')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Add / Edit Employee Modal */}
