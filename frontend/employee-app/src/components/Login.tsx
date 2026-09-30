@@ -29,10 +29,10 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
+      <div className="max-w-md w-full bg-white rounded-xl border border-slate-200 p-6 sm:p-8 space-y-6">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4">
-            <LogIn className="w-8 h-8" />
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-blue-600 text-white mb-4">
+            <LogIn className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">WFH Attendance App</h1>
           <p className="text-sm text-gray-500 mt-1">Portal Absensi Karyawan - VeryResto</p>
@@ -83,7 +83,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm shadow-md transition duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? 'Memproses...' : 'Masuk Akun'}
           </button>

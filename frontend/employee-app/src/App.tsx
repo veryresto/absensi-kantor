@@ -48,7 +48,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-gray-900 pb-12">
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-10">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         onLogout={handleLogout}
       />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7">
         {activeTab === 'profile' && (
           <ProfileView
             user={user}

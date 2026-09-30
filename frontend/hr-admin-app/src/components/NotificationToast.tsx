@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, X, User, Phone, Lock, Camera } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 
 export interface AlertNotification {
   id: string;
@@ -19,14 +19,14 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({ alerts, on
   if (alerts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 space-y-3 max-w-md w-full px-4 sm:px-0">
+    <div className="fixed bottom-4 right-0 sm:right-4 z-50 space-y-3 max-w-md w-full px-4 sm:px-0">
       {alerts.map((alert) => (
         <div
           key={alert.id}
-          className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-indigo-500/30 animate-slide-up flex items-start justify-between gap-3"
+          className="bg-slate-900 text-white p-4 rounded-lg shadow-lg border border-slate-700 animate-slide-up flex items-start justify-between gap-3"
         >
           <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-indigo-600/20 text-indigo-400 rounded-xl mt-0.5 border border-indigo-500/30 animate-pulse">
+            <div className="p-2 bg-indigo-600/20 text-indigo-300 rounded-md mt-0.5 border border-indigo-500/30">
               <Bell className="w-5 h-5" />
             </div>
             <div className="space-y-1">

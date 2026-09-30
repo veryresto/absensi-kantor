@@ -34,10 +34,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+      <div className="max-w-md w-full bg-white rounded-xl border border-slate-700 p-6 sm:p-8 space-y-6">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4">
-            <ShieldCheck className="w-8 h-8" />
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-indigo-600 text-white mb-4">
+            <ShieldCheck className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">HRD Monitoring Portal</h1>
           <p className="text-sm text-gray-500 mt-1">Sistem Pengawasan Absensi & Data Karyawan</p>
@@ -84,7 +84,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm shadow-md transition duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {loading ? 'Memverifikasi...' : 'Masuk Portal HRD'}
           </button>

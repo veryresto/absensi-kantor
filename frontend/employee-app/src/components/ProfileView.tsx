@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { api, getPhotoUrl } from '../api';
-import { User, Phone, Lock, Camera, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Phone, Lock, Camera, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface ProfileViewProps {
   user: any;
@@ -59,20 +59,20 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, onProfileUpdated
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="max-w-3xl mx-auto">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header banner */}
-        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
+        <div className="h-24 sm:h-28 bg-blue-600"></div>
 
         <div className="px-6 pb-6 relative">
           {/* Avatar */}
-          <div className="relative -mt-16 mb-4 inline-block">
+          <div className="relative -mt-12 mb-3 inline-block">
             <img
               src={photoPreview || getPhotoUrl(user.photoUrl)}
               alt={user.name}
-              className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md bg-white"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white bg-white"
             />
-            <label className="absolute bottom-1 right-1 p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer shadow-md transition">
+            <label className="absolute bottom-0 right-0 p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer border-2 border-white transition">
               <Camera className="w-4 h-4" />
               <input
                 type="file"
@@ -85,11 +85,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, onProfileUpdated
 
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 pb-4 mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
+              <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
               <p className="text-sm text-blue-600 font-medium">{user.position}</p>
               <p className="text-xs text-gray-500 mt-0.5">{user.email}</p>
             </div>
-            <span className="mt-2 sm:mt-0 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+            <span className="mt-2 sm:mt-0 px-2.5 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-md">
               Status WFH: Active
             </span>
           </div>

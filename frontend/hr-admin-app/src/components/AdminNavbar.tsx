@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Eye, Database, LogOut, ShieldCheck, Bell } from 'lucide-react';
+import { Users, Eye, Database, LogOut, ShieldCheck } from 'lucide-react';
 
 interface AdminNavbarProps {
   activeTab: 'monitoring' | 'employees' | 'audit';
@@ -17,27 +17,28 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
   unreadAlertsCount,
 }) => {
   return (
-    <header className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <header className="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Title */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md">
-              <ShieldCheck className="w-6 h-6" />
+            <div className="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+              <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <span className="font-bold text-white text-lg leading-tight block">VeryResto HRD</span>
-              <span className="text-xs text-indigo-300 block">Monitoring & Employee Portal</span>
+              <span className="text-xs text-slate-400 hidden md:block">Monitoring & Employee Portal</span>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <nav className="flex space-x-1 sm:space-x-2">
+          <nav className="flex space-x-0.5 sm:space-x-1" aria-label="Navigasi admin">
             <button
               onClick={() => setActiveTab('monitoring')}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition ${
+              aria-label="Monitoring Absensi"
+              className={`flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-md text-sm font-medium transition ${
                 activeTab === 'monitoring'
-                  ? 'bg-indigo-600 text-white font-semibold shadow'
+                  ? 'bg-indigo-600 text-white font-semibold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -47,9 +48,10 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('employees')}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition ${
+              aria-label="Kelola Karyawan"
+              className={`flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-md text-sm font-medium transition ${
                 activeTab === 'employees'
-                  ? 'bg-indigo-600 text-white font-semibold shadow'
+                  ? 'bg-indigo-600 text-white font-semibold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -59,9 +61,10 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
 
             <button
               onClick={() => setActiveTab('audit')}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition relative ${
+              aria-label="Audit Log Queue"
+              className={`flex items-center gap-2 px-2.5 sm:px-3 py-2 rounded-md text-sm font-medium transition relative ${
                 activeTab === 'audit'
-                  ? 'bg-indigo-600 text-white font-semibold shadow'
+                  ? 'bg-indigo-600 text-white font-semibold'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800'
               }`}
             >
@@ -84,7 +87,8 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
             <button
               onClick={onLogout}
               title="Keluar"
-              className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition"
+              aria-label="Keluar"
+              className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-md transition"
             >
               <LogOut className="w-5 h-5" />
             </button>

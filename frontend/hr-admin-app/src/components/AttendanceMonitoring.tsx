@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../api';
-import { Search, Calendar, Eye, Filter, RefreshCw } from 'lucide-react';
+import { Search, RefreshCw } from 'lucide-react';
 
 export const AttendanceMonitoring: React.FC = () => {
   const [fromDate, setFromDate] = useState('');
@@ -54,15 +54,12 @@ export const AttendanceMonitoring: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+    <div className="max-w-7xl mx-auto">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6 gap-4">
           <div>
-            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Eye className="w-6 h-6 text-indigo-600" />
-              Monitoring Absensi Karyawan (Read-Only)
-            </h2>
-            <p className="text-xs text-gray-500">Pantau seluruh catatan absensi masuk dan pulang karyawan secara terpusat</p>
+            <h1 className="text-xl font-bold text-gray-900">Monitoring Absensi Karyawan</h1>
+            <p className="text-sm text-gray-500 mt-1">Data absensi seluruh karyawan · hanya dapat dilihat</p>
           </div>
 
           <button
@@ -75,7 +72,7 @@ export const AttendanceMonitoring: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200 items-end">
+        <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200 items-end">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">
               Dari Tanggal
@@ -117,7 +114,7 @@ export const AttendanceMonitoring: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm shadow-sm transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition flex items-center justify-center gap-2"
             >
               <Search className="w-4 h-4" />
               Filter Absensi
@@ -126,7 +123,7 @@ export const AttendanceMonitoring: React.FC = () => {
         </form>
 
         {/* Table View */}
-        <div className="overflow-x-auto rounded-xl border border-gray-200">
+        <div className="hidden md:block overflow-x-auto rounded-lg border border-gray-200">
           <table className="w-full text-left text-sm text-gray-700">
             <thead className="bg-slate-100 text-slate-800 font-semibold border-b text-xs uppercase tracking-wider">
               <tr>
@@ -176,6 +173,31 @@ export const AttendanceMonitoring: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        <div className="md:hidden border border-gray-200 rounded-lg divide-y divide-gray-200">
+          {loading ? (
+            <p className="py-8 px-4 text-center text-sm text-gray-500">Memuat data absensi karyawan...</p>
+          ) : filteredRecords.length === 0 ? (
+            <p className="py-8 px-4 text-center text-sm text-gray-500">Tidak ada catatan absensi yang ditemukan.</p>
+          ) : filteredRecords.map((rec) => (
+            <article key={rec.id} className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="font-semibold text-sm text-gray-900 truncate">{rec.employee?.name || 'Karyawan'}</h2>
+                  <p className="text-xs text-gray-500 truncate">{rec.employee?.position || '-'} · {rec.employee?.email}</p>
+                </div>
+                <span className={`shrink-0 px-2 py-0.5 text-xs font-semibold rounded-md ${rec.clockOut ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+                  {rec.clockOut ? 'Pulang' : 'Masuk'}
+                </span>
+              </div>
+              <p className="font-mono text-xs font-semibold text-gray-700 mt-3 mb-2">{rec.date}</p>
+              <dl className="grid grid-cols-2 gap-3 text-sm">
+                <div><dt className="text-xs text-gray-500 mb-1">Absen masuk</dt><dd className="font-mono text-emerald-700">{formatDateTime(rec.clockIn)}</dd></div>
+                <div><dt className="text-xs text-gray-500 mb-1">Absen pulang</dt><dd className="font-mono text-amber-700">{formatDateTime(rec.clockOut)}</dd></div>
+              </dl>
+            </article>
+          ))}
         </div>
       </div>
     </div>

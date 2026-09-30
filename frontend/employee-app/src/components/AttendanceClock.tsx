@@ -65,15 +65,15 @@ export const AttendanceClock: React.FC = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-5">
       {/* Real-time Clock Card */}
-      <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-3xl p-8 shadow-xl text-center relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-10">
+      <div className="bg-slate-900 text-white rounded-xl px-5 py-7 sm:p-8 text-center relative overflow-hidden border border-slate-800">
+        <div className="absolute top-0 right-0 p-5 opacity-10">
           <Clock className="w-48 h-48" />
         </div>
         <p className="text-sm font-medium uppercase tracking-widest text-blue-300 mb-1">{formatDate(time)}</p>
-        <h1 className="text-5xl font-extrabold tracking-tight font-mono my-2">{formatTime(time)}</h1>
-        <p className="text-xs text-slate-400">Standard Time (WIB) - WFH Attendance Logging</p>
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight font-mono my-2">{formatTime(time)}</h1>
+        <p className="text-xs text-slate-400">Waktu Indonesia Barat (WIB)</p>
       </div>
 
       {msg && (
@@ -88,18 +88,18 @@ export const AttendanceClock: React.FC = () => {
       )}
 
       {/* Action Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm space-y-6">
-        <h3 className="text-lg font-bold text-gray-900 border-b pb-3">Status Absensi Hari Ini</h3>
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-5">
+        <h2 className="text-lg font-semibold text-gray-900 border-b pb-3">Status Absensi Hari Ini</h2>
 
         <div className="grid grid-cols-2 gap-4 text-center">
-          <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+          <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
             <p className="text-xs font-semibold uppercase text-emerald-600">Jam Masuk</p>
             <p className="text-2xl font-bold text-emerald-900 mt-1">
               {parseDisplayTime(todayRecord?.clockIn)}
             </p>
           </div>
 
-          <div className="p-4 bg-amber-50 rounded-xl border border-amber-100">
+          <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
             <p className="text-xs font-semibold uppercase text-amber-600">Jam Pulang</p>
             <p className="text-2xl font-bold text-amber-900 mt-1">
               {parseDisplayTime(todayRecord?.clockOut)}
@@ -111,7 +111,7 @@ export const AttendanceClock: React.FC = () => {
           <button
             onClick={handleClockIn}
             disabled={loading || Boolean(todayRecord?.clockIn)}
-            className="py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base"
+            className="py-3.5 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base"
           >
             <LogIn className="w-6 h-6" />
             {todayRecord?.clockIn ? 'Sudah Absen Masuk' : 'Absen Masuk'}
@@ -120,7 +120,7 @@ export const AttendanceClock: React.FC = () => {
           <button
             onClick={handleClockOut}
             disabled={loading || !todayRecord?.clockIn || Boolean(todayRecord?.clockOut)}
-            className="py-4 px-6 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl shadow-md transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base"
+            className="py-3.5 px-6 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-base"
           >
             <LogOut className="w-6 h-6" />
             {todayRecord?.clockOut ? 'Sudah Absen Pulang' : 'Absen Pulang'}

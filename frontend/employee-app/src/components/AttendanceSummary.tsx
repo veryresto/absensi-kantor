@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../api';
-import { Search, Calendar, Filter, FileSpreadsheet } from 'lucide-react';
+import { Search, Calendar } from 'lucide-react';
 
 export const AttendanceSummary: React.FC = () => {
   const getDefaultDates = () => {
@@ -52,22 +52,15 @@ export const AttendanceSummary: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-        <div className="flex items-center justify-between border-b pb-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
-              <FileSpreadsheet className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Summary Absensi WFH</h2>
-              <p className="text-xs text-gray-500">Ringkasan riwayat kehadiran karyawan</p>
-            </div>
-          </div>
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+        <div className="border-b pb-4 mb-5">
+          <h1 className="text-xl font-bold text-gray-900">Summary Absensi WFH</h1>
+          <p className="text-sm text-gray-500 mt-1">Ringkasan riwayat kehadiran karyawan</p>
         </div>
 
         {/* Filter Form */}
-        <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 items-end">
+        <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5 bg-slate-50 p-4 rounded-lg border border-slate-200 items-end">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">
               Dari Tanggal (From)
@@ -111,7 +104,7 @@ export const AttendanceSummary: React.FC = () => {
         </form>
 
         {/* Table View */}
-        <div className="overflow-x-auto rounded-xl border border-gray-200">
+        <div className="hidden sm:block overflow-x-auto rounded-lg border border-gray-200">
           <table className="w-full text-left text-sm text-gray-700">
             <thead className="bg-gray-100 text-gray-900 font-semibold border-b text-xs uppercase tracking-wider">
               <tr>
@@ -152,6 +145,27 @@ export const AttendanceSummary: React.FC = () => {
               )}
             </tbody>
           </table>
+        </div>
+
+        <div className="sm:hidden border border-gray-200 rounded-lg divide-y divide-gray-200">
+          {loading ? (
+            <p className="py-8 px-4 text-center text-sm text-gray-500">Memuat data summary...</p>
+          ) : records.length === 0 ? (
+            <p className="py-8 px-4 text-center text-sm text-gray-500">Tidak ada catatan absensi untuk rentang tanggal ini.</p>
+          ) : records.map((rec) => (
+            <article key={rec.id} className="p-4 bg-white">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <p className="font-mono font-semibold text-sm text-gray-900">{rec.date}</p>
+                <span className={`px-2 py-0.5 text-xs font-semibold rounded-md ${rec.clockOut ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+                  {rec.clockOut ? 'Selesai Pulang' : 'Sudah Masuk'}
+                </span>
+              </div>
+              <dl className="grid grid-cols-2 gap-3 text-sm">
+                <div><dt className="text-xs text-gray-500 mb-1">Masuk</dt><dd className="font-mono text-emerald-700">{formatDateTime(rec.clockIn)}</dd></div>
+                <div><dt className="text-xs text-gray-500 mb-1">Pulang</dt><dd className="font-mono text-amber-700">{formatDateTime(rec.clockOut)}</dd></div>
+              </dl>
+            </article>
+          ))}
         </div>
       </div>
     </div>

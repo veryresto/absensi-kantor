@@ -72,7 +72,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 text-gray-900 pb-12">
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-10">
       <AdminNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -81,7 +81,7 @@ export const App: React.FC = () => {
         unreadAlertsCount={alerts.length}
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7">
         {activeTab === 'monitoring' && <AttendanceMonitoring />}
         {activeTab === 'employees' && <EmployeeManagement />}
         {activeTab === 'audit' && <AuditLogsView />}
