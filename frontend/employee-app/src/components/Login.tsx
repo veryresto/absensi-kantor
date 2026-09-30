@@ -7,8 +7,8 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('budi.santoso@veryresto.com');
-  const [password, setPassword] = useState('Password123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -89,11 +89,6 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           </button>
         </form>
 
-        <div className="border-t border-gray-200 pt-4 text-xs text-gray-500 text-center">
-          <p className="font-semibold text-gray-700 mb-1">Akun Demo Karyawan:</p>
-          <p>budi.santoso@veryresto.com | Password123!</p>
-          <p>siti.aminah@veryresto.com | Password123!</p>
-        </div>
       </div>
     </div>
   );

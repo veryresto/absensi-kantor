@@ -7,8 +7,8 @@ interface AdminLoginProps {
 }
 
 export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('hr.admin@veryresto.com');
-  const [password, setPassword] = useState('Password123!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -60,7 +60,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="hr.admin@veryresto.com"
+                placeholder="nama@veryresto.com"
                 className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
@@ -90,10 +90,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
           </button>
         </form>
 
-        <div className="border-t border-gray-200 pt-4 text-xs text-gray-500 text-center">
-          <p className="font-semibold text-gray-700 mb-1">Kredensial Default HRD:</p>
-          <p>hr.admin@veryresto.com | Password123!</p>
-        </div>
       </div>
     </div>
   );
