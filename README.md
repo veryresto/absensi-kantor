@@ -38,10 +38,10 @@ Tabel operasional pada aplikasi HRD ditampilkan sebagai daftar record ringkas pa
 
 | Role | Domain | Email | Password |
 |------|--------|-------|----------|
-| **Admin HRD** | `absen-admin.veryresto.com` | `hr.admin@veryresto.com` | `Password123!` |
-| **Karyawan 1** | `absen.veryresto.com` | `budi.santoso@veryresto.com` | `Password123!` |
-| **Karyawan 2** | `absen.veryresto.com` | `siti.aminah@veryresto.com` | `Password123!` |
-| **Karyawan 3** | `absen.veryresto.com` | `dewi.lestari@veryresto.com` | `Password123!` |
+| **Admin HRD** | `absen-admin.veryresto.com` | `hr.admin@veryresto.com` | `Password321!!` |
+| **Karyawan 1** | `absen.veryresto.com` | `budi.santoso@veryresto.com` | `Password321!!` |
+| **Karyawan 2** | `absen.veryresto.com` | `siti.aminah@veryresto.com` | `Password321!!` |
+
 
 ---
 
